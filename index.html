@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="node_modules/summernote/dist/summernote.css">
+    <script src="node_modules/summernote/dist/summernote.js"></script>
+    <link rel="stylesheet" href="node_modules/indes.css">
+    <script>
+        $(function(){
+            function loca(){
+                $.ajax({
+                    url:"http://localhost:3000/item/list",
+                    type:"POST",
+                    success:function(e){
+                        //console.log(e)
+                        var string1=''
+                        for(i in e){
+                            string1+="<tr><td>"+e[i].id+"</td><td>"+e[i].title+"</td><td>"+e[i].con+"</td><td><button class='btn4' data-id='"+e[i].id+"' data-toggle='modal' data-target='#myModal'>修改</button></td><td><button class='btn3' data-id='"+e[i].id+"'>删除</button></td></tr>"
+                        }
+                        $('#xs').html(string1)
+                    }
+                })
+            }
+            loca()
+
+            $('#xs').on('click','.btn3',function(){
+                var id = $(this).attr('data-id')
+                var _this= $(this)
+                $.ajax({
+                    url:"http://localhost:3000/item/list3",
+                    type:"POST",
+                    data:{
+                        acc:id
+                    },
+                    success:function(e){
+                        console.log(e)
+                        loca()
+                    }
+                })
+            })
+
+            //$('.jgr').summernote()
+            //添加
+            $('.jgr1').summernote()
+            $('.xb').click(function(){
+                $.ajax({
+                    url:"http://localhost:3000/item/list1",
+                    type:'POST',
+                    data:{
+                        abc: $('.jgr').val(),
+                        abb: $('.jgr1').summernote('code')
+                    } ,
+                    success:function(e){
+                        //console.log(e)
+                        loca()
+                    }
+                })
+            })
+
+            $('#xs').on('click','.btn4',function(){
+                var id1 = $(this).attr('data-id')
+                var _this= $(this)
+                /*alert(id1)*/
+
+                $('.btn2').click(function(){
+
+                    $.ajax({
+                        url:"http://localhost:3000/item/list4",
+                        type:"POST",
+                        data:{
+                            xg:id1,
+                            xg1:$('.jgr').val(),
+                            xg2:$('.jgr1').summernote('code')
+                        },
+                        success:function(e){
+                            loca()
+                        }
+                    })
+                })
+
+            })
+
+        })
+    </script>
+</head>
+<body>
+<!--<div class="jgr"></div>-->
+<!--<div class="jgr1"></div>-->
+<!--<button class="xb btn btn-success">+</button>-->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Export</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                上传添加
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">添加</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!--<div class="jgr"></div>-->
+                            <!--<div class="jgr1"></div>-->
+                            <form>
+                                <div class="form-group">
+                                    <h3 class="modal-title" >title</h3>
+                                    <input type="text" class="jgr form-control" placeholder="Text input">
+                                    <h3 class="modal-title" >content</h3>
+                                    <textarea class="jgr1 form-control" rows="3"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="xb btn btn-primary">确认上传</button>
+                            <button type="button" class="btn2 btn btn-primary">确认修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="sub-header">Section title</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>title</th>
+                        <th>con</th>
+                        <th>修改</th>
+                        <td>删除</td>
+                    </tr>
+                    </thead>
+                    <tbody id="xs">
+                    <!--<tr>-->
+                        <!--<td>1,001</td>-->
+                        <!--<td>Lorem</td>-->
+                        <!--<td>ipsum</td>-->
+                        <!--<td>ipsum</td>-->
+                    <!--</tr>-->
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
